@@ -31,7 +31,6 @@ const Carousel = () => {
 
   const fetchTrendingCoins = async () => {
     const { data } = await axios.get(TrendingCoins(currency));
-    console.log(data);
     setTrending(data);
   };
 
@@ -53,6 +52,7 @@ const Carousel = () => {
           src={coin?.image}
           alt={coin?.name}
           height="80"
+          width="80"
           style={{ marginBottom: 10 }}
         />
         <span>
@@ -60,7 +60,7 @@ const Carousel = () => {
           &nbsp;
           <span
             style={{
-              color: profit > 0 ? "rgb(14, 203, 129)" : "red",
+              color: profit > 0 ? "#00ff77" : "#ff0500",
               fontWeight: 500,
             }}
           >

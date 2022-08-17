@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import Pagination from "@material-ui/lab/Pagination";
+
 import Pagination from '@mui/material/Pagination';
 import {
   Container,
@@ -18,8 +18,6 @@ import {
   Table,
   Paper,
 } from "@material-ui/core";
-import axios from "axios";
-import { CoinList } from "../config/api";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
 
@@ -45,12 +43,10 @@ const useStyles = makeStyles((theme)=>({
 
 
 export default function CoinsTable() {
-  const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, coins, loading, fetchCoins } = CryptoState();
 
  
   const classes = useStyles();
@@ -65,15 +61,6 @@ export default function CoinsTable() {
     },
   });
 
-  const fetchCoins = async () => {
-    setLoading(true);
-    const { data } = await axios.get(CoinList(currency));
-    console.log(data);
-
-    setCoins(data);
-    setLoading(false);
-  };
-
   useEffect(() => {
     fetchCoins();
   }, [currency]);
@@ -85,8 +72,11 @@ export default function CoinsTable() {
         coin.symbol.toLowerCase().includes(search)
     );
   };
+  const countp = (handleSearch().length/10).toFixed(0);
+
 
   const headarr = ["Coin", "Price", "24h Change", "Market Cap"];
+    
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
@@ -117,7 +107,7 @@ export default function CoinsTable() {
                         fontFamily: "Montserrat",
                       }}
                       key={head}
-                      align={head === "Coin" ? "" : "right"}
+                      
                     >
                       {head}
                     </TableCell>
@@ -173,7 +163,7 @@ export default function CoinsTable() {
                         <TableCell
                           align="right"
                           style={{
-                            color: profit > 0 ? "rgb(14, 203, 129)" : "red",
+                            color: profit > 0 ? "#00ff77" : "#ff0500",
                             fontWeight: 500,
                           }}
                         >
@@ -194,15 +184,13 @@ export default function CoinsTable() {
             </Table>
           )}
         </TableContainer>
-
-        {/* Comes from @material-ui/lab */}
         <Pagination
-          count={(handleSearch()?.length / 10).toFixed(0)}
+          count={countp}
           style={{
             padding: 20,
             width: "100%",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "center"
           }}
           classes={{ ul: classes.pagination }}
           onChange={(_, value) => {
