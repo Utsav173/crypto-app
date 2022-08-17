@@ -46,7 +46,7 @@ const Banner = () => {
           <Typography
             variant="subtitle2"
             style={{
-              color: "darkgrey",
+              color: "white",
               textTransform: "capitalize",
               fontFamily: "Montserrat",
             }}
